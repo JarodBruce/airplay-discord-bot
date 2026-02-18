@@ -4,10 +4,7 @@ Mac/iPhone/iPad の AirPlay から Shairport Sync 経由で Discord ボイスチ
 
 ## 前提条件
 
-- Kubernetes クラスタ（k3s など）
-- kubectl がセットアップ済み
 - Docker（イメージビルド用）
-- Tailscale（iPhone/iPad からのアクセス時）
 
 ## クイックスタート
 
@@ -28,8 +25,7 @@ export VOICE_CHANNEL_ID=your_channel_id_here
 ### 3. デプロイを実行
 
 ```bash
-chmod +x start.sh
-./start.sh
+docker compose up -d
 ```
 
 ## 設定
@@ -64,10 +60,6 @@ chmod +x start.sh
 ```bash
 # Tailscale の mDNS を確認
 dns-sd -B _raop._tcp local.
-
-# Kubernetes ポッドのステータスを確認
-kubectl get pods -n airplay
-kubectl logs -f deployment/discord-bot -n airplay
 ```
 
 ### ボイスチャネル接続エラー
@@ -88,14 +80,7 @@ kubectl logs -f deployment/discord-bot -n airplay
 │   └── requirements.txt
 ├── shairport-sync/               # Shairport Sync 設定
 │   └── shairport-sync.conf
-├── k8s/                          # Kubernetes マニフェスト
-│   ├── namespace.yaml
-│   ├── shairport-configmap.yaml
-│   ├── discord-configmap.yaml
-│   ├── shairport-deployment.yaml
-│   └── discord-deployment.yaml
-├── start.sh                      # デプロイスクリプト
-├── docker-compose.yml            # Docker Compose（参考用）
+├── compose.yml                   # Docker Compose（参考用）
 └── README.md
 ```
 
@@ -104,7 +89,6 @@ kubectl logs -f deployment/discord-bot -n airplay
 - **Shairport Sync**: Classic AirPlay (AirPlay 1) 受信
 - **FIFO パイプ**: `/tmp/airplay-fifo` で Shairport Sync と Discord Bot が音声データを共有
 - **Opus エンコード**: 高音質（510kbps）でエンコード
-- **Kubernetes**: `hostNetwork: true` で Tailscale NIC に直接バインド
 
 ## ライセンス
 
