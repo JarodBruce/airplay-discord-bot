@@ -1,0 +1,28 @@
+services:
+  shairport-sync:
+    image: mikebrady/shairport-sync:4.1-classic
+    container_name: airplay-receiver
+    network_mode: host
+    cap_add:
+      - SYS_NICE
+    volumes:
+      - ./shairport-sync/shairport-sync.conf:/etc/shairport-sync.conf
+      - pipe-data:/tmp
+    restart: unless-stopped
+    command: shairport-sync -a "Discord AirPlay"
+
+  discord-bot:
+    build: ./bot
+    container_name: discord-audio-bot
+    network_mode: host
+    depends_on:
+      - shairport-sync
+    volumes:
+      - pipe-data:/tmp
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - VOICE_CHANNEL_ID=${VOICE_CHANNEL_ID}
+    restart: unless-stopped
+
+volumes:
+  pipe-data:

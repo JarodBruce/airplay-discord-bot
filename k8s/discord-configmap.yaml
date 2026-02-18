@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: discord-config
+  namespace: airplay
+data:
+  DISCORD_TOKEN: "${DISCORD_TOKEN}"
+  VOICE_CHANNEL_ID: "${VOICE_CHANNEL_ID}"
