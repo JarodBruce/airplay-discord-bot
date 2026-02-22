@@ -1,0 +1,45 @@
+name: Build and Push Docker Image to GHCR
+
+# どのタイミングで自動ビルドを走らせるかの設定
+on:
+  push:
+    branches: [ "main", "master" ]
+    # botディレクトリ内のコードが変更された時だけビルドする（ムダなビルドを節約）
+    paths:
+      - 'bot/**'
+      - '.github/workflows/**'
+
+env:
+  REGISTRY: ghcr.io
+  # 先ほどのエラーを防ぐため、すべて小文字で指定
+  IMAGE_NAME: jarodbruce/airplay-discord-bot
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    
+    # GITHUB_TOKEN に GHCR へ書き込む(push)権限を付与
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry (GHCR)
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          # 自分で発行したPATではなく、Actionsが自動生成する一時トークンを使います
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          # Dockerfile があるディレクトリを指定
+          context: ./bot
+          push: true
+          # プッシュするイメージ名とタグ
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
