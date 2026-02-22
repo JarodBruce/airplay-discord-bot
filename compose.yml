@@ -21,7 +21,7 @@ services:
 
   discord-bot:
     # Swarm用: build の代わりにビルド済みのローカルイメージを指定
-    image: local/airplay-discord-bot:latest
+    image: ghcr.io/jarodbruce/airplay-discord-bot:latest
     networks:
       - hostnet
     depends_on:
