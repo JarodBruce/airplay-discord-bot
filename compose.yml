@@ -12,3 +12,9 @@ services:
       - VOICE_CHANNEL_ID=${VOICE_CHANNEL_ID}
     deploy:
       replicas: 1
+
+# --- ここから下を追加 ---
+networks:
+  hostnet:
+    name: host
+    external: true
