@@ -7,6 +7,9 @@ on:
     # botディレクトリ内のコードが変更された時だけビルドする（ムダなビルドを節約）
     paths:
       - 'bot/**'
+      - 'shairport-sync/**'
+      - 'Dockerfile'
+      - 'entrypoint.sh'
       - '.github/workflows/**'
 
 env:
@@ -39,7 +42,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           # Dockerfile があるディレクトリを指定
-          context: ./bot
+          context: .
           push: true
           # プッシュするイメージ名とタグ
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest

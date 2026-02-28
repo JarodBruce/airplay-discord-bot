@@ -74,8 +74,9 @@ dns-sd -B _raop._tcp local.
 
 ```
 .
+├── Dockerfile                    # 統合コンテナビルド用
+├── entrypoint.sh                 # コンテナ起動スクリプト
 ├── bot/                          # Discord Bot コード
-│   ├── Dockerfile
 │   ├── main.py
 │   └── requirements.txt
 ├── shairport-sync/               # Shairport Sync 設定
@@ -86,8 +87,9 @@ dns-sd -B _raop._tcp local.
 
 ## 技術詳細
 
+- **シングルコンテナ構成**: PythonとShairport Syncを1つのイメージに統合
 - **Shairport Sync**: Classic AirPlay (AirPlay 1) 受信
-- **FIFO パイプ**: `/tmp/airplay-fifo` で Shairport Sync と Discord Bot が音声データを共有
+- **FIFO パイプ**: コンテナ内部の `/tmp/airplay-fifo` で Shairport Sync と Discord Bot が音声データを共有
 - **Opus エンコード**: 高音質（510kbps）でエンコード
 
 ## ライセンス

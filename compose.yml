@@ -1,33 +1,10 @@
 version: '3.8'
 
 services:
-  shairport-sync:
-    image: mikebrady/shairport-sync:4.1-classic
-    # Swarm用: mDNS検知のためにホストネットワークを使用
-    networks:
-      - hostnet
-    # Swarm用: 相対パスマウントの代わりに config を使用
-    configs:
-      - source: shairport_conf
-        target: /etc/shairport-sync.conf
-    volumes:
-      - pipe-data:/tmp
-    command: shairport-sync -a "Discord AirPlay"
-    deploy:
-      placement:
-        # イメージがローカルにある node01 に固定して稼働させる
-        constraints:
-          - node.hostname == node01
-
-  discord-bot:
-    # Swarm用: build の代わりにビルド済みのローカルイメージを指定
+  airplay-discord:
     image: ghcr.io/warpflow-home/airplay-discord:latest
     networks:
       - hostnet
-    depends_on:
-      - shairport-sync
-    volumes:
-      - pipe-data:/tmp
     environment:
       - DISCORD_TOKEN=${DISCORD_TOKEN}
       - VOICE_CHANNEL_ID=${VOICE_CHANNEL_ID}
@@ -36,16 +13,7 @@ services:
         constraints:
           - node.hostname == node01
 
-volumes:
-  pipe-data:
-
-
 networks:
   hostnet:
     name: host
     external: true
-
-configs:
-  shairport_conf:
-    # PortainerがGitからプルした際、このファイルをSwarmのconfigとして登録してくれます
-    file: ./shairport-sync/shairport-sync.conf
