@@ -12,7 +12,7 @@ on:
 env:
   REGISTRY: ghcr.io
   # 先ほどのエラーを防ぐため、すべて小文字で指定
-  IMAGE_NAME: jarodbruce/airplay-discord-bot
+  IMAGE_NAME: warpflow-home/airplay-discord
 
 jobs:
   build-and-push:
