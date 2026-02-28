@@ -5,15 +5,10 @@ services:
     image: ghcr.io/warpflow-home/airplay-discord:latest
     networks:
       - hostnet
+    volumes:
+      - /var/run/dbus:/var/run/dbus
     environment:
       - DISCORD_TOKEN=${DISCORD_TOKEN}
       - VOICE_CHANNEL_ID=${VOICE_CHANNEL_ID}
     deploy:
-      placement:
-        constraints:
-          - node.hostname == node01
-
-networks:
-  hostnet:
-    name: host
-    external: true
+      replicas: 1

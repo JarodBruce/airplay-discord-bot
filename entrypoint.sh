@@ -1,6 +1,12 @@
 #!/bin/bash
 set -e
 
+# Start D-Bus and Avahi daemon for mDNS
+echo "Starting D-Bus and Avahi daemon..."
+mkdir -p /var/run/dbus
+dbus-daemon --system
+avahi-daemon -D
+
 # Create the named pipe for audio data
 echo "Creating named pipe at /tmp/airplay-fifo..."
 rm -f /tmp/airplay-fifo
