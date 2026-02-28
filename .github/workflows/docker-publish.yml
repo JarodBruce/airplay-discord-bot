@@ -19,7 +19,7 @@ env:
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, docker]
     
     # GITHUB_TOKEN に GHCR へ書き込む(push)権限を付与
     permissions:
